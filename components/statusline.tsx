@@ -6,19 +6,10 @@ const StatusLine = memo(function StatusLine_(props: {
   x: number,
   y: number,
   h: number,
-  w: number
+  w: number,
+  rtt: number
 }) {
-  const [ping, setPing] = useState('ping:   0');
-  const t = useRef(new Date().getTime());
-  useTick(() => {
-    const now = new Date().getTime();
-    if (now - t.current < 700) return;
-    t.current = now;
-    setPing(
-      'ping: ' +
-      `${('   ' + (9+Math.floor(Math.random() * 11))).slice(-3)}`
-    );
-  });
+  const rtt = 'ping: ' + `${('   ' + (props.rtt)).slice(-3)}`;
   return (
     <>
     <Rect col={0x00BBFF}
@@ -45,8 +36,8 @@ const StatusLine = memo(function StatusLine_(props: {
     <Rect col={0xAAFF00}
       x={props.x+props.w*0.85} y={props.y} w={props.w*0.15} h={props.h}
     />
-    <UText text={ping} col={0x000000}
-      x={props.x+props.w-props.h*0.48*(ping.length+1)} y={props.y+props.h*0.1}
+    <UText text={rtt} col={0x000000}
+      x={props.x+props.w-props.h*0.48*(rtt.length+1)} y={props.y+props.h*0.1}
       h={props.h*0.8}
     />
     </>
