@@ -2,14 +2,15 @@ import Head from 'next/head'
 import React, { useEffect, useState } from 'react';
 import { Stage } from "@inlet/react-pixi";
 import { ReactNode } from "react";
+import { StatusLine } from './statusline';
 
 const Layout = (props: { title: string, children: ReactNode }) => {
   const [loaded, setLoaded] = useState(false);
   const stageProps = {
     width: 1920,
     height: 1080,
-    raf: false,
-    renderOnComponentChange: true,
+    // raf: false,
+    // renderOnComponentChange: true,
     options: {
       autoDensity: true,
       // resolution: resolution || 1,
@@ -38,6 +39,7 @@ const Layout = (props: { title: string, children: ReactNode }) => {
       {loaded &&
         <Stage {...stageProps}>
           {props.children}
+          <StatusLine x={0} y={1060} w={1920} h={20} />
         </Stage>
       }
     </div>
