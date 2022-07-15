@@ -1,5 +1,5 @@
 import { useTick } from '@inlet/react-pixi';
-import { memo, useRef, useState } from 'react';
+import { memo } from 'react';
 import { Rect, UText } from './util'
 
 const StatusLine = memo(function StatusLine_(props: {

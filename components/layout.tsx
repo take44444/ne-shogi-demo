@@ -1,12 +1,21 @@
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Stage } from "@inlet/react-pixi";
 import { ReactNode } from "react";
 import { StatusLine } from './statusline';
+import socketio_client from '../lib/socketio-client';
 
 const Layout = (props: { title: string, children: ReactNode }) => {
   const [loaded, setLoaded] = useState(false);
-  const [rtt, setRtt] = useState(0);
+  const [rtt, setRtt] = useState(999);
+  const io = useMemo(() => new socketio_client().connect(
+    'dummy-url',
+    {
+      transports: ['websocket'],
+      forceNew: true,
+      reconnection: true
+    }
+  ), []);
   const stageProps = {
     width: 1920,
     height: 1080,
@@ -27,7 +36,14 @@ const Layout = (props: { title: string, children: ReactNode }) => {
         inactive: () => alert('font loading failed')
       });}
     );
-    setInterval(() => setRtt(9+Math.floor(Math.random() * 61)), 700);
+    io.on('pong', (timestamp: number) => {
+      setRtt(new Date().getTime() - timestamp
+        + 9 + Math.floor(Math.random() * 20)
+      );
+    });
+    setInterval(() => {
+      io.emit('ping', new Date().getTime());
+    }, 300);
   }, []);
   return (
     <div id={"root"}>
