@@ -1,12 +1,14 @@
 import Head from 'next/head'
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { Children, cloneElement, isValidElement, useEffect, useMemo, useRef, useState } from 'react';
 import { Stage } from "@inlet/react-pixi";
 import { ReactNode } from "react";
 import { StatusLine } from './statusline';
 import socketio_client from '../lib/socketio-client';
+import { Rect, UText } from './util';
 
 const Layout = (props: { title: string, children: ReactNode }) => {
   const [loaded, setLoaded] = useState(false);
+  const [logger, setLogger] = useState('-');
   const [rtt, setRtt] = useState(999);
   const io = useMemo(() => new socketio_client().connect(
     'dummy-url',
@@ -16,6 +18,11 @@ const Layout = (props: { title: string, children: ReactNode }) => {
       reconnection: true
     }
   ), []);
+  const children = useMemo(() => Children.map(props.children, (child) => {
+    if (isValidElement(child)) {
+      return cloneElement(child, { io: io, logger: setLogger });
+    }
+  }), [io]);
   const stageProps = {
     width: 1920,
     height: 1080,
@@ -25,7 +32,7 @@ const Layout = (props: { title: string, children: ReactNode }) => {
       autoDensity: true,
       // resolution: resolution || 1,
       // antialias: resolution <= 1,
-      backgroundColor: 0xFFFFFF,
+      backgroundColor: 0xE8E8FF,
     },
   };
   useEffect(() => {
@@ -56,8 +63,11 @@ const Layout = (props: { title: string, children: ReactNode }) => {
       </Head>
       {loaded &&
         <Stage {...stageProps}>
-          {props.children}
-          <StatusLine x={0} y={1060} w={1920} h={20} rtt={rtt} />
+          <Rect x={42} y={16} w={45} h={45} col={0x000000} />
+          <UText x={100} y={20} h={42}
+            text={'Ne:shogi'} col={0x000000} />
+          {children}
+          <StatusLine x={0} y={1060} w={1920} h={20} rtt={rtt} log={logger} />
         </Stage>
       }
     </div>

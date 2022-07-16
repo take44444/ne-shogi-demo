@@ -1,11 +1,23 @@
 class SocketIOClient {
-  private clientEvents: any;
-  private serverEvents: any;
+  public clientEvents: any;
+  public serverEvents: any;
   constructor() {
     this.clientEvents = {};
     this.serverEvents = {};
     this.serverOn('ping', (timestamp: number) => {
       this.serverEmit('pong', timestamp);
+    });
+    this.serverOn('api', (json: any, callback: Function) => {
+      if (json.requestType === 'user-info-detail') {
+        callback({
+          followingList : [
+            { userId : 'Altema', followBack : true },
+            { userId : '1omega1', followBack : true },
+            { userId : 'Ken', followBack : false }
+          ]
+        });
+      }
+      return;
     });
   }
 
