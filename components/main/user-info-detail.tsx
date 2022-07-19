@@ -1,30 +1,7 @@
 import { Container } from "@inlet/react-pixi";
 import { GlowFilter } from "@pixi/filter-glow";
 import { memo, useCallback, useEffect, useState } from "react";
-import { Circle, ProgressBar, rate2class, RRect, Tabs, UText } from "../util";
-
-const Class = memo(function Class_(props: {
-  x: number,
-  y: number,
-  sz: number,
-  rate: number,
-  callback: () => void,
-  disable: boolean
-}) {
-  return (
-    <>
-    <Circle x={props.x} y={props.y} sz={props.sz} col={0x111111} filters={
-      [new GlowFilter({distance: 20, color: 0x111111, outerStrength: 1.5})]
-    } interactive={!props.disable} buttonMode={!props.disable}
-      pointertap={props.callback}
-    />
-    <Circle x={props.x} y={props.y} sz={props.sz * 0.9} col={0xFFFFFF} />
-    <UText anchor={0.5} x={props.x} y={props.y} h={props.sz * 0.7}
-      text={rate2class(props.rate)} col={0x000000}
-    />
-    </>
-  );
-});
+import { Circle, Class, ProgressBar, rate2class, RRect, Tabs, UText } from "../util";
 
 type KifuMetaInfo = {
   id: string,

@@ -203,6 +203,29 @@ const Tabs = memo(function Tabs_(props: {
   );
 });
 
+const Class = memo(function Class_(props: {
+  x: number,
+  y: number,
+  sz: number,
+  rate: number,
+  callback: () => void,
+  disable: boolean
+}) {
+  return (
+    <>
+    <Circle x={props.x} y={props.y} sz={props.sz} col={0x111111} filters={
+      [new GlowFilter({distance: 20, color: 0x111111, outerStrength: 1.5})]
+    } interactive={!props.disable} buttonMode={!props.disable}
+      pointertap={props.callback}
+    />
+    <Circle x={props.x} y={props.y} sz={props.sz * 0.9} col={0xFFFFFF} />
+    <UText anchor={0.5} x={props.x} y={props.y} h={props.sz * 0.7}
+      text={rate2class(props.rate)} col={0x000000}
+    />
+    </>
+  );
+});
+
 const rate2class = (rate: number): string => {
   rate = Math.floor(rate / 100);
   if (rate < 15) {
@@ -214,4 +237,4 @@ const rate2class = (rate: number): string => {
   return '神';
 };
 
-export { UText, Rect, RRect, Hexagon, Circle, ProgressBar, Button, Popup, Tabs, rate2class };
+export { UText, Rect, RRect, Hexagon, Circle, ProgressBar, Button, Class, Popup, Tabs, rate2class };
